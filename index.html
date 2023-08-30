@@ -71,11 +71,11 @@
 
                 if (maxLoss >= maxLossInput) {
                     if (i > 1) {
-                        result += "L" + (i - 1) + "__Total Volume:[" + roundFloat((calculateTotalVolume(i - 1, k))) + "], Max Loss:[-" + roundFloat(calculateMaxLoss(i - 1, k)) + "($)], Max Profit:[" + roundFloat(calculateMaxProfit(i - 1, k)) + "($)]" + "<br />";
+                        result += "L" + (i - 1) + "__Total Volume: [" + roundFloat((calculateTotalVolume(i - 1, k))) + "] , Max Loss:[ -" + roundFloat(calculateMaxLoss(i - 1, k)) + "($)], Max Profit:[ " + roundFloat(calculateMaxProfit(i - 1, k)) + "($) ]" + "<br />";
                         console.log("L" + (i - 1), "__Total Volume:" + roundFloat((calculateTotalVolume(i - 1, k))), "Max Loss:-" + roundFloat(calculateMaxLoss(i - 1, k)) + "($)", "Max Profit:" + roundFloat(calculateMaxProfit(i - 1, k)) + "($)")
                     }
 
-                    result += "L" + i + "__Total Volume:[" + roundFloat(totalLotSize) + "], Max Loss:[-" + roundFloat(maxLoss) + "($)], Max Profit:[" + roundFloat(maxProfit) + "($)]" + "<br />";
+                    result += "L" + i + "__Total Volume: [" + roundFloat(totalLotSize) + "] , Max Loss:[ -" + roundFloat(maxLoss) + "($) ] , Max Profit:[ " + roundFloat(maxProfit) + "($) ]" + "<br />";
                     console.log("L" + i, "__Total Volume:" + roundFloat(totalLotSize), "Max Loss:-" + roundFloat(maxLoss) + "($)", "Max Profit:" + roundFloat(maxProfit) + "($)")
                     break
                 }
@@ -88,8 +88,8 @@
     }
 
 </script>
-<form>
-    <table>
+<form style="max-width: 800px;margin: auto;">
+    <table style="font-size: 20pt;">
         <tr>
             <td>Max Loss</td>
             <td><input type="text" value="1200" id="maxLoss"/></td>
@@ -111,6 +111,6 @@
             <td><input type="text" value="2" id="lotsizeMultiply"/></td>
         </tr>
     </table>
-    <input type="button" value="Calculate" onclick="calculate()"/>
+    <input type="button" value="Calculate" onclick="calculate()" style="font-size: 20pt;"/>
     <div id="result"></div>
 </form>
