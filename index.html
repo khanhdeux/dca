@@ -50,6 +50,7 @@
     function calculate() {
         var result = "";
         var maxLossInput = document.getElementById('maxLoss').value;
+        var minLevel = document.getElementById('minLevel').value;
         var maxLevel = document.getElementById('maxLevel').value;
         var lotsizeMultiply = document.getElementById('lotsizeMultiply').value;
 
@@ -57,7 +58,7 @@
         for (var k = initLotSize; k <= initLotSize * 10; k = k + initLotSize) {
 
             console.log("LotSize:" + roundFloat(k))
-            result += "=== LotSize: " + roundFloat(k) + " === <br />";
+            result += "=== LotSize: <b>" + roundFloat(k) + "</b> === <br />";
 
             for (var i = 1; i <= maxLevel; i++) {
                 // Calculate TotalVolume
@@ -70,15 +71,16 @@
                 var maxProfit = calculateMaxProfit(i, k);
 
                 if (maxLoss >= maxLossInput) {
-                    if (i > 1) {
-                        result += "L" + (i - 1) + "__Total Volume: [" + roundFloat((calculateTotalVolume(i - 1, k))) + "] , Max Loss:[ -" + roundFloat(calculateMaxLoss(i - 1, k)) + "($)], Max Profit:[ " + roundFloat(calculateMaxProfit(i - 1, k)) + "($) ]" + "<br />";
-                        console.log("L" + (i - 1), "__Total Volume:" + roundFloat((calculateTotalVolume(i - 1, k))), "Max Loss:-" + roundFloat(calculateMaxLoss(i - 1, k)) + "($)", "Max Profit:" + roundFloat(calculateMaxProfit(i - 1, k)) + "($)")
-                    }
-
-                    result += "L" + i + "__Total Volume: [" + roundFloat(totalLotSize) + "] , Max Loss:[ -" + roundFloat(maxLoss) + "($) ] , Max Profit:[ " + roundFloat(maxProfit) + "($) ]" + "<br />";
-                    console.log("L" + i, "__Total Volume:" + roundFloat(totalLotSize), "Max Loss:-" + roundFloat(maxLoss) + "($)", "Max Profit:" + roundFloat(maxProfit) + "($)")
                     break
                 }
+
+                if (i < minLevel) {
+                    continue;
+                }
+
+                var finalProfit = roundFloat(parseFloat(maxLossInput) + maxProfit);
+                var finalLoss = roundFloat(parseFloat(maxLossInput) - maxLoss);
+                result += "L" + i + "__Volume: [" + roundFloat(totalLotSize) + "] , Max Loss:[ -" + roundFloat(maxLoss) + "$ (<span style='color: red'><b>-" + finalLoss  + "$</b>)</span>] , Max Profit:[ " + roundFloat(maxProfit) + "$ (<span style='color: green'><b>" + roundFloat(finalProfit)  + "$</b>)</span>]" + "<br />";
             }
 
             result += "<br />";
@@ -93,6 +95,10 @@
         <tr>
             <td>Max Loss</td>
             <td><input type="text" value="1200" id="maxLoss"/></td>
+        </tr>
+        <tr>
+            <td>Min Level</td>
+            <td><input type="text" value="1" id="minLevel" name="minLevel"/></td>
         </tr>
         <tr>
             <td>Max Level</td>
@@ -112,5 +118,6 @@
         </tr>
     </table>
     <input type="button" value="Calculate" onclick="calculate()" style="font-size: 20pt;"/>
+    <hr />
     <div id="result"></div>
 </form>
