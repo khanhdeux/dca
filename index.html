@@ -1,0 +1,116 @@
+<script type="text/javascript">
+    function roundFloat(i) {
+        return parseFloat(i).toFixed(2);
+    }
+
+    function calculateTotalVolume(i, lotSize) {
+        var totalLotSize = 0;
+        var currentLotSize = lotSize;
+
+        for (var j = 1; j <= i; j++) {
+            totalLotSize += currentLotSize;
+            currentLotSize *= 2;
+        }
+
+        return totalLotSize;
+    }
+
+    function calculateMaxLoss(i, lotSize) {
+        var distance = document.getElementById('distance').value;
+        var leverage = document.getElementById('leverage').value
+
+        var totalLoss = 0;
+        var currentLotSize = lotSize;
+        var pips = distance / 10;
+
+        for (var j = 1; j <= i; j++) {
+            totalLoss += currentLotSize * pips * leverage * (i - j + 1);
+            currentLotSize *= 2;
+        }
+
+        return totalLoss;
+    }
+
+    function calculateMaxProfit(i, lotSize) {
+        var distance = document.getElementById('distance').value;
+        var leverage = document.getElementById('leverage').value
+
+        var totalProfit = 0;
+        var pips = distance / 10;
+        var currentLotSize = lotSize;
+
+        for (var j = 1; j <= i; j++) {
+            totalProfit += pips * currentLotSize * leverage;
+            currentLotSize *= 2;
+        }
+
+        return totalProfit;
+    }
+
+    function calculate() {
+        var result = "";
+        var maxLossInput = document.getElementById('maxLoss').value;
+        var maxLevel = document.getElementById('maxLevel').value;
+        var lotsizeMultiply = document.getElementById('lotsizeMultiply').value;
+
+        var initLotSize = 0.01 * lotsizeMultiply;
+        for (var k = initLotSize; k <= initLotSize * 10; k = k + initLotSize) {
+
+            console.log("LotSize:" + roundFloat(k))
+            result += "=== LotSize: " + roundFloat(k) + " === <br />";
+
+            for (var i = 1; i <= maxLevel; i++) {
+                // Calculate TotalVolume
+                var totalLotSize = calculateTotalVolume(i, k);
+
+                // Calculate MaxLoss
+                var maxLoss = calculateMaxLoss(i, k);
+
+                // Calculate MaxProfit
+                var maxProfit = calculateMaxProfit(i, k);
+
+                if (maxLoss >= maxLossInput) {
+                    if (i > 1) {
+                        result += "L" + (i - 1) + "__Total Volume:[" + roundFloat((calculateTotalVolume(i - 1, k))) + "], Max Loss:[-" + roundFloat(calculateMaxLoss(i - 1, k)) + "($)], Max Profit:[" + roundFloat(calculateMaxProfit(i - 1, k)) + "($)]" + "<br />";
+                        console.log("L" + (i - 1), "__Total Volume:" + roundFloat((calculateTotalVolume(i - 1, k))), "Max Loss:-" + roundFloat(calculateMaxLoss(i - 1, k)) + "($)", "Max Profit:" + roundFloat(calculateMaxProfit(i - 1, k)) + "($)")
+                    }
+
+                    result += "L" + i + "__Total Volume:[" + roundFloat(totalLotSize) + "], Max Loss:[-" + roundFloat(maxLoss) + "($)], Max Profit:[" + roundFloat(maxProfit) + "($)]" + "<br />";
+                    console.log("L" + i, "__Total Volume:" + roundFloat(totalLotSize), "Max Loss:-" + roundFloat(maxLoss) + "($)", "Max Profit:" + roundFloat(maxProfit) + "($)")
+                    break
+                }
+            }
+
+            result += "<br />";
+        }
+
+        document.getElementById('result').innerHTML = result;
+    }
+
+</script>
+<form>
+    <table>
+        <tr>
+            <td>Max Loss</td>
+            <td><input type="text" value="1200" id="maxLoss"/></td>
+        </tr>
+        <tr>
+            <td>Max Level</td>
+            <td><input type="text" value="10" id="maxLevel" name="maxLevel"/></td>
+        </tr>
+        <tr>
+            <td>Distance</td>
+            <td><input type="text" value="25" id="distance"/></td>
+        </tr>
+        <tr>
+            <td>Leverage</td>
+            <td><input type="text" value="100" id="leverage"/></td>
+        </tr>
+        <tr>
+            <td>Lotsize Multiply</td>
+            <td><input type="text" value="2" id="lotsizeMultiply"/></td>
+        </tr>
+    </table>
+    <input type="button" value="Calculate" onclick="calculate()"/>
+    <div id="result"></div>
+</form>
