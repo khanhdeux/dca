@@ -80,7 +80,7 @@
 
                 var finalProfit = roundFloat(parseFloat(maxLossInput) + maxProfit);
                 var finalLoss = roundFloat(parseFloat(maxLossInput) - maxLoss);
-                result += "L" + i + "__Volume: [" + roundFloat(totalLotSize) + "] , Max Loss:[ -" + roundFloat(maxLoss) + "$ (<span style='color: red'><b>-" + finalLoss  + "$</b>)</span>] , Max Profit:[ " + roundFloat(maxProfit) + "$ (<span style='color: green'><b>" + roundFloat(finalProfit)  + "$</b>)</span>]" + "<br />";
+                result += "L" + i + "__Volume: [" + roundFloat(totalLotSize) + "] , Max Loss:[ -" + roundFloat(maxLoss) + "$ (<span style='color: red'><b>" + finalLoss  + "$</b>)</span>] , Max Profit:[ " + roundFloat(maxProfit) + "$ (<span style='color: green'><b>" + roundFloat(finalProfit)  + "$</b>)</span>]" + "<br />";
             }
 
             result += "<br />";
