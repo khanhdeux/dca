@@ -17,14 +17,16 @@
 
     function calculateMaxLoss(i, lotSize) {
         var distance = document.getElementById('distance').value;
-        var leverage = document.getElementById('leverage').value
+        var leverage = document.getElementById('leverage').value;
+        var lastDistance = document.getElementById('lastDistance').value;
 
         var totalLoss = 0;
         var currentLotSize = lotSize;
         var pips = distance / 10;
 
         for (var j = 1; j <= i; j++) {
-            totalLoss += currentLotSize * pips * leverage * (i - j + 1);
+            var dist = j === i ?  (lastDistance / 10) : pips;
+            totalLoss += currentLotSize * dist * leverage * (i - j + 1);
             currentLotSize *= 2;
         }
 
@@ -107,6 +109,10 @@
         <tr>
             <td>Distance</td>
             <td><input type="text" value="15" id="distance"/></td>
+        </tr>
+        <tr>
+            <td>Last Distance</td>
+            <td><input type="text" value="15" id="lastDistance"/></td>
         </tr>
         <tr>
             <td>Contract Size</td>
