@@ -3,13 +3,30 @@
         return parseFloat(i).toFixed(2);
     }
 
+    function calculateLotSize(i, lotSize) {
+        var volumeTypeInput = document.getElementById('volumeType').value;
+
+        if (volumeTypeInput === "mul") {
+            if (i === 1) {
+                return lotSize;
+            }
+
+            return calculateLotSize(i - 1, lotSize) * 2;
+        }
+
+        if (volumeTypeInput === "fib") {
+            if (i === 0 || i === 1) {
+                return lotSize;
+            }
+            return calculateLotSize(i - 1, lotSize) + calculateLotSize(i - 2, lotSize);
+        }
+    }
+
     function calculateTotalVolume(i, lotSize) {
         var totalLotSize = 0;
-        var currentLotSize = lotSize;
 
         for (var j = 1; j <= i; j++) {
-            totalLotSize += currentLotSize;
-            currentLotSize *= 2;
+            totalLotSize += calculateLotSize(j, lotSize);
         }
 
         return totalLotSize;
@@ -21,13 +38,11 @@
         var lastDistance = document.getElementById('lastDistance').value;
 
         var totalLoss = 0;
-        var currentLotSize = lotSize;
         var pips = distance / 10;
 
         for (var j = 1; j <= i; j++) {
-            var dist = j === i ?  (lastDistance / 10) : pips;
-            totalLoss += currentLotSize * dist * leverage * (i - j + 1);
-            currentLotSize *= 2;
+            var dist = j === i ? (lastDistance / 10) : pips;
+            totalLoss += calculateLotSize(j, lotSize) * dist * leverage * (i - j + 1);
         }
 
         return totalLoss;
@@ -39,11 +54,9 @@
 
         var totalProfit = 0;
         var pips = distance / 10;
-        var currentLotSize = lotSize;
 
         for (var j = 1; j <= i; j++) {
-            totalProfit += pips * currentLotSize * leverage;
-            currentLotSize *= 2;
+            totalProfit += pips * calculateLotSize(j, lotSize) * leverage;
         }
 
         return totalProfit;
@@ -58,8 +71,6 @@
 
         var initLotSize = 0.01 * lotsizeMultiply;
         for (var k = initLotSize; k <= initLotSize * 10; k = k + initLotSize) {
-
-            console.log("LotSize:" + roundFloat(k))
             result += "=== LotSize: <b>" + roundFloat(k) + "</b> === <br />";
 
             for (var i = 1; i <= maxLevel; i++) {
@@ -82,7 +93,7 @@
 
                 var finalProfit = roundFloat(parseFloat(maxLossInput) + maxProfit);
                 var finalLoss = roundFloat(parseFloat(maxLossInput) - maxLoss);
-                result += "L" + i + "__Volume: [" + roundFloat(totalLotSize) + "] , Max Loss:[ -" + roundFloat(maxLoss) + "$ (<span style='color: red'><b>" + finalLoss  + "$</b>)</span>] , Max Profit:[ " + roundFloat(maxProfit) + "$ (<span style='color: green'><b>" + roundFloat(finalProfit)  + "$</b>)</span>]" + "<br />";
+                result += "L" + i + "__Volume: [" + roundFloat(totalLotSize) + "] , Max Loss:[ <span style='color: red'><b>-" + roundFloat(maxLoss) + "$</b></span> (" + finalLoss + "$)] , Max Profit:[ <span style='color: green'><b>" + roundFloat(maxProfit) + "$</b></span> (" + roundFloat(finalProfit) + "$)]" + "<br />";
             }
 
             result += "<br />";
@@ -95,8 +106,15 @@
 <form style="max-width: 800px;margin: auto;">
     <table style="font-size: 20pt;">
         <tr>
+            <td>Volume Type</td>
+            <td><select name="volumeType" id="volumeType">
+                <option value="mul">Multiply</option>
+                <option value="fib">Fibonacci</option>
+            </select></td>
+        </tr>
+        <tr>
             <td>Max Loss</td>
-            <td><input type="text" value="1200" id="maxLoss"/></td>
+            <td><input type="text" value="2400" id="maxLoss"/></td>
         </tr>
         <tr>
             <td>Min Level</td>
@@ -120,10 +138,10 @@
         </tr>
         <tr>
             <td>Lotsize Multiply</td>
-            <td><input type="text" value="2" id="lotsizeMultiply"/></td>
+            <td><input type="text" value="1" id="lotsizeMultiply"/></td>
         </tr>
     </table>
     <input type="button" value="Calculate" onclick="calculate()" style="font-size: 20pt;"/>
-    <hr />
+    <hr/>
     <div id="result"></div>
 </form>
