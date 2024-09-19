@@ -41,8 +41,8 @@
         var pips = distance / 10;
 
         for (var j = 1; j <= i; j++) {
-            var dist = j === i ? (lastDistance / 10) : pips;
-            totalLoss += calculateLotSize(j, lotSize) * dist * leverage * (i - j + 1);
+            var dist = j === i ? (lastDistance / 10) : ((pips * (i - j)) + (lastDistance / 10));
+            totalLoss += calculateLotSize(j, lotSize) * dist * leverage;
         }
 
         return totalLoss;
