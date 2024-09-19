@@ -87,7 +87,7 @@
                     break
                 }
 
-                if (i < minLevel) {
+                if (i <= minLevel) {
                     continue;
                 }
 
@@ -109,12 +109,12 @@
             <td>Volume Type</td>
             <td><select name="volumeType" id="volumeType">
                 <option value="mul">Multiply</option>
-                <option value="fib">Fibonacci</option>
+                <option selected="selected" value="fib">Fibonacci</option>
             </select></td>
         </tr>
         <tr>
             <td>Max Loss</td>
-            <td><input type="text" value="2400" id="maxLoss"/></td>
+            <td><input type="text" value="3000" id="maxLoss"/></td>
         </tr>
         <tr>
             <td>Min Level</td>
