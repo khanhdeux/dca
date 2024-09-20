@@ -6,20 +6,24 @@
     function calculateLotSize(i, lotSize) {
         var volumeTypeInput = document.getElementById('volumeType').value;
 
-        if (volumeTypeInput === "mul") {
-            if (i === 1) {
-                return lotSize;
-            }
-
-            return calculateLotSize(i - 1, lotSize) * 2;
-        }
-
         if (volumeTypeInput === "fib") {
             if (i === 0 || i === 1) {
                 return lotSize;
             }
             return calculateLotSize(i - 1, lotSize) + calculateLotSize(i - 2, lotSize);
         }
+
+        if (volumeTypeInput === "unq") {
+            return lotSize;
+        }        
+
+        if (volumeTypeInput === "mul") {
+            if (i === 1) {
+                return lotSize;
+            }
+
+            return calculateLotSize(i - 1, lotSize) * 2;
+        }        
     }
 
     function calculateTotalVolume(i, lotSize) {
@@ -87,7 +91,7 @@
                     break
                 }
 
-                if (i <= minLevel) {
+                if (i < minLevel) {
                     continue;
                 }
 
@@ -110,6 +114,7 @@
             <td><select name="volumeType" id="volumeType">
                 <option value="mul">Multiply</option>
                 <option selected="selected" value="fib">Fibonacci</option>
+                <option value="unq">Unique</option>
             </select></td>
         </tr>
         <tr>
